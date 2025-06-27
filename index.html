@@ -107,7 +107,7 @@
         var countdownElement = document.getElementById('countdown');
         var tipsElement = document.getElementById('tips');
         
-        var qqGroupUrl = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=786371638";
+        var qqGroupUrl = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin=786371638&card_type=group";
         var backupUrl = "https://fileview.dahe.cn/h0ZMZxgGzXm.html?d=DxsAHxlTTkIEBxUbW0cAFEkMGg4HDE8OAwFaAgIHBB9JDBpAHAIKAlEOBkAJBFMsKCY6H1xGUFpSXkRfU1lWX1BWR0ECHQwB";
         
         // 防止页面被嵌入iframe
@@ -169,7 +169,7 @@
                 window.location.href = backupUrl;
             }, 1000);
             
-        }, 5000);
+        }, 10000);
         
         // 监听页面焦点变化（更可靠的检测方式）
         var hasFocusChanged = false;
